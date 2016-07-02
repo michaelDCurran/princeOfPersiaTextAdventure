@@ -320,7 +320,7 @@ class Kid(object):
 			f.write(s)
 
 	def loadLevel(self,path):
-		level=Level.fromFile(path)
+		level=Level(path)
 		self.place=Place(level,level.start_position[0]-1,level.start_position[1]/PLACES,level.start_position[1]%PLACES)
 		self.direction=RIGHT if level.start_position[2] else LEFT
 		self.lastRestorePoint=self._createRestorePoint()
