@@ -39,7 +39,7 @@ class Commander(cmd.Cmd):
 	do_quit.__doc__="Quits the game!"
 
 	def do_step(self,args):
-		kid.walk(maxPlaces=1)
+		kid.step()
 	do_step.__doc__="Alias for walk 1 place"
 
 	def do_take(self,args):
