@@ -13,7 +13,7 @@ class Level(object):
 	def _loadFromPath(self,path):
 		self.path=path
 		self.levelNo=int(self.path[-2:])
-		self.nextLevelPath=self.path[:-2]+("%s"%(self.levelNo+1))
+		self.nextLevelPath=self.path[:-2]+("%02d"%(self.levelNo+1))
 		with open(path,'rb') as f:
 			baseData=f.read()
 		buffer=ctypes.c_buffer(baseData)

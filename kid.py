@@ -323,6 +323,7 @@ class Kid(object):
 		kid=pickle.loads(saveState)
 		if not isinstance(kid,cls):
 			raise ValueError("file was not a Kid")
+		kid.lastRestorePoint=saveState
 		return kid
 
 	@classmethod
