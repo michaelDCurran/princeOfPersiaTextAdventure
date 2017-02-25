@@ -107,7 +107,7 @@ if __name__=='__main__':
 		kid=Kid.loadFromFile(loadPath)
 		print "Restored from %s"%loadPath
 	else:
-		kid=Kid('levels/06')
+		kid=Kid('levels/01')
 	while True:
 		print "On level %d"%kid.place.level.levelNo
 		kid.touchPlace(0,0)
