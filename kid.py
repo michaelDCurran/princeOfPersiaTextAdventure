@@ -255,24 +255,42 @@ class Kid(object):
 			behind=self.place.getNextPlace(oppositeDirections[self.direction])
 			if not behind or behind.tile.isWall:
 				print "bumped roof"
+				aheadAbove=above.getNextPlace(self.direction)
+				if aheadAbove and isinstance(aheadAbove.tile,Tile_looseBoard):
+					print "Bumped loose board in roof ahead"
+					aheadAbove.tile.touch()
 				return False
 			self.place=above
 			print "Climbed up to ledge directly above"
 			self.touchPlace(0,0)
 			return True
 		print "bumped roof"
+		aheadAbove=above.getNextPlace(self.direction)
+		if aheadAbove and isinstance(aheadAbove.tile,Tile_looseBoard):
+			print "Bumped loose board in roof ahead"
+			aheadAbove.tile.touch()
 		return False
 
 	def turn(self):
 		self._faceDirection(oppositeDirections[self.direction])
 
+	def turnLeft(self):
+		return self._faceDirection(LEFT)
+
+	def turnRight(self):
+		return self._faceDirection(RIGHT)
+
 	def _faceDirection(self,direction):
-		self.direction=direction
-		self.printDirection()
-		ahead=self.place.getNextPlace(self.direction)
-		if ahead:
-			print "Ahead: ",
-			self.printPlace(place=ahead)
+		if self.direction!=direction:
+			self.direction=direction
+			self.printDirection()
+			self.printPlace()
+			ahead=self.place.getNextPlace(self.direction)
+			if ahead:
+				print "Ahead: ",
+				self.printPlace(place=ahead)
+			return True
+		return False
 
 	def leap(self,large=False,grab=False):
 		print "leaping %s"%directionLabels[self.direction]
