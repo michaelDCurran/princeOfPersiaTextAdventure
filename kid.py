@@ -224,6 +224,12 @@ class Kid(object):
 		return True
 
 	def climbUp(self):
+		if isinstance(self.place.tile,Tile_exit):
+			if self.place.tile.isOpen:
+				print "Walking through Exit"
+				raise LevelExit
+			else:
+				print "Exit is closed"
 		above=self.place.getNextPlace(UP)
 		if not above:
 			print "Nothing to climb up to"
