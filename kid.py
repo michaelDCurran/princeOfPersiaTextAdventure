@@ -163,8 +163,8 @@ class Kid(object):
 			msg+=" until at %s"%stopAtName
 		print msg+":"
 		continuing=True
+		hMomentum=2
 		while continuing or placeCount<minPlaces:
-			hMomentum=minPlaces if run else min(placeCount,minPlaces)
 			newPlace=self.getNextPlaceOrDie(self.place,self.direction)
 			if newPlace.tile.isWall:
 				print "Can't go that way - ahead: ",
@@ -184,7 +184,7 @@ class Kid(object):
 					nextPlace=self.place.getNextPlace(self.direction)
 					if nextPlace and nextPlace.tile.isWall:
 						continuing=False
-					elif not run and (not nextPlace or nextPlace.tile.isEmpty or  nextPlace.guard or nextPlace.tile.willKillActer(0,hMomentum)):
+					elif not run and (not nextPlace or nextPlace.tile.isEmpty):
 						continuing=False
 			oldHealthPoints=self.healthPoints
 			oldFloor=self.place.floor
