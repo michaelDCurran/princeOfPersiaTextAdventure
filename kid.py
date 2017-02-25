@@ -140,6 +140,15 @@ class Kid(object):
 			self.touchPlace(floorCount,0)
 		return floorCount>0
 
+	def step(self,grab=None):
+		newPlace=self.getNextPlaceOrDie(self.place,self.direction)
+		if newPlace.tile.isWall:
+			print "Can't go that way - ahead: ",
+			self.printPlace(place=newPlace,includeAbove=False)
+			return
+		self.place=newPlace
+		self.touchPlace(0,1,grab=grab)
+
 	def _walkRun(self,maxPlaces,stopAtName,run=False):
 		minPlaces=2 if run else 1
 		placeCount=0
