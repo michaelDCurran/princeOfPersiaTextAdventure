@@ -66,10 +66,10 @@ class Kid(object):
 			if above:
 				if not above.tile.isEmpty:
 					msg+=", "+above.tile.roofName+" above"
-					if above.hasClearDirection(self.direction):
-						msg+=" ends"
 					if above.hasClearDirection(oppositeDirections[self.direction]):
 						msg+=" starts"
+					elif above.hasClearDirection(self.direction):
+						msg+=" ends"
 		print msg
 
 	def printDirection(self):
