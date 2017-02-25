@@ -6,7 +6,6 @@ class KidDeath(Exception):
 class Kid(object):
 
 	hasSword=False
-	clock=0
 
 	def getNextPlaceOrDie(self,place,direction):
 		newPlace=place.getNextPlace(direction)
@@ -43,7 +42,6 @@ class Kid(object):
 		self.printHealth()
 
 	def pickUpItem(self):
-		self.clock+=1
 		t=self.place.tile
 		if isinstance(t,Tile_item):
 			t.take()
@@ -78,7 +76,6 @@ class Kid(object):
 		print "Facing %s"%directionLabels[self.direction]
 
 	def exit(self):
-		self.clock+=1
 		if isinstance(self.place.tile,Tile_exit):
 			if self.place.tile.isOpen:
 				print "Walking through Exit"
@@ -121,7 +118,6 @@ class Kid(object):
 			self.die()
 		elif self.place.tile.willHarmActer(vMomentum,hMomentum):
 			self.changeHealthPoints(-1)
-			self.clock+=2
 
 	def doPossibleGrab(self):
 		newPlace=self.place.getNextPlace(self.direction)
@@ -129,7 +125,6 @@ class Kid(object):
 			return False
 		self.place=newPlace
 		print "grabbed onto ledge on %s and climbed up"%directionLabels[self.direction]
-		self.clock+=2
 		self.touchPlace(0,1,grab=False)
 		return True
 
@@ -139,7 +134,6 @@ class Kid(object):
 			if grab and floorCount<2 and self.doPossibleGrab():
 				return True
 			print "Falling down"
-			self.clock+=1
 			self.place=self.getNextPlaceOrDie(self.place,DOWN)
 			floorCount+=1
 		if floorCount>0:
@@ -167,7 +161,6 @@ class Kid(object):
 				print "Can't go that way - ahead: ",
 				self.printPlace(place=newPlace,includeAbove=False)
 				break
-			self.clock+=1 if run else 2
 			self.place=newPlace
 			placeCount+=1
 			print "%s: "%placeCount,
@@ -203,7 +196,6 @@ class Kid(object):
 		elif not self.hasSword:
 			print "Nothing to kill guard with"
 		else:
-			self.clock+=3
 			nextPlace.guard.kill()
 
 	def climbDown(self):
@@ -214,7 +206,6 @@ class Kid(object):
 			return False
 		self.place=self.getNextPlaceOrDie(newPlace,DOWN)
 		print "Climbing down backwards on %s"%directionLabels[backDirection]
-		self.clock+=2
 		if self.place.tile.isEmpty:
 			newPlace=self.place.getNextPlace(self.direction)
 			if newPlace and not newPlace.tile.isWall:
@@ -224,7 +215,6 @@ class Kid(object):
 		return True
 
 	def climbUp(self):
-		self.clock+=1
 		above=self.place.getNextPlace(UP)
 		if not above:
 			print "Nothing to climb up to"
@@ -236,7 +226,6 @@ class Kid(object):
 					self.place=aheadAbove
 					print "climbed up to ledge on %s"%directionLabels[self.direction]
 					self.touchPlace(0,0)
-					self.clock+=1
 					return True
 				print "Blocked by %s"%aheadAbove.description
 				return False
@@ -246,7 +235,6 @@ class Kid(object):
 			print "Bumped loose board"
 			above.tile.touch()
 			self.changeHealthPoints(-1)
-			self.clock+=1
 			return False
 		elif not above.tile.isWall and above.hasClearDirection(oppositeDirections[self.direction]):
 			behind=self.place.getNextPlace(oppositeDirections[self.direction])
@@ -256,13 +244,11 @@ class Kid(object):
 			self.place=above
 			print "Climbed up to ledge directly above"
 			self.touchPlace(0,0)
-			self.clock+=1
 			return True
 		print "bumped roof"
 		return False
 
 	def turn(self):
-		self.clock+=1
 		self._faceDirection(oppositeDirections[self.direction])
 
 	def _faceDirection(self,direction):
@@ -285,7 +271,6 @@ class Kid(object):
 					self.touchPlace(1,1,grab=grab)
 				return False
 			self.place=newPlace
-			self.clock+=1
 			print self.place.tile.passVerb+" "+self.place.tile.name
 			placeCount+=1
 		newPlace=self.getNextPlaceOrDie(self.place,self.direction)

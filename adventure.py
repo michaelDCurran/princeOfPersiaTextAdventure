@@ -38,14 +38,6 @@ class Commander(cmd.Cmd):
 		sys.exit(0)
 	do_quit.__doc__="Quits the game!"
 
-	def do_clock(self,args):
-		print "Time elapsed: %02d:%02d"%(kid.clock/60,kid.clock%60)
-	do_clock.__doc__="""Shows how much time has been spent. 
-	Note that this is not real-world time, rather each action takes 1
-	or more seconds to complete.
-	E.g. running is faster than walking.
-	"""
-
 	def do_step(self,args):
 		kid.walk(maxPlaces=1)
 	do_step.__doc__="Alias for walk 1 place"
@@ -153,7 +145,6 @@ class Commander(cmd.Cmd):
 if __name__=='__main__':
 	print "Prince of Persia Level Walker"
 	levelNo=1
-	lastKidClock=0
 	if len(sys.argv)>1:
 		loadPath=sys.argv[1]
 		kid=Kid.loadFromFile(loadPath)
