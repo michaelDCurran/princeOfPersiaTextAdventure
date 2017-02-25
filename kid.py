@@ -298,6 +298,9 @@ class Kid(object):
 		placeCount=0
 		while placeCount<places:
 			newPlace=self.getNextPlaceOrDie(self.place,self.direction)
+			if newPlace.guard:
+				print "(Hit by guard)"
+				self.die()
 			if newPlace.tile.isWall:
 				print "Hit "+newPlace.description
 				if placeCount>0:
