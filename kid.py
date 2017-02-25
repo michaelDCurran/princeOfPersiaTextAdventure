@@ -94,14 +94,13 @@ class Kid(object):
 		if self.place.tile.isEmpty:
 			self.doPossibleFall(grab=grab)
 			return
-		if grab: grab=False
 		if vMomentum>0:
 			print "Landed on ",
 		self.printPlace()
 		self.doPossibleHarm(vMomentum,hMomentum)
 		self.place.tile.touch()
-		if self.place.tile.isEmpty and (not continuing or hMomentum<2):
-			return self.doPossibleFall()
+		if self.place.tile.isEmpty and not continuing:
+			return self.doPossibleFall(grab=grab is not False)
 		if not continuing:
 			ahead=self.place.getNextPlace(self.direction)
 			if ahead:
