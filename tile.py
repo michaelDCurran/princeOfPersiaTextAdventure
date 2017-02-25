@@ -66,7 +66,7 @@ class Tile_spikes(Tile_floor):
 	name="spikes"
 
 	def willKillActer(self,vMomentum,hMomentum):
-		if vMomentum>=2 or hMomentum>=1:
+		if vMomentum>=2 or hMomentum>=2:
 			return True
 		return super(Tile_spikes,self).willKillActer(vMomentum,hMomentum)
 
