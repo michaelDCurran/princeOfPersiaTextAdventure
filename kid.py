@@ -343,5 +343,6 @@ class Kid(object):
 	def loadLevel(self,path):
 		level=Level(path)
 		self.place=Place(level,level.start_position[0]-1,level.start_position[1]/PLACES,level.start_position[1]%PLACES)
+		self.hasSword=True if self.place.level.levelNo>1 else False
 		self.direction=RIGHT if level.start_position[2] else LEFT
 		self.lastRestorePoint=self._createRestorePoint()
