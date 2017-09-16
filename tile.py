@@ -50,7 +50,6 @@ class Tile_floor(Tile):
 
 	name="floor"
 	isFloor=True
-	roofName="floor"
 
 	def willKillActer(self,vMomentum,hMomentum):
 		if vMomentum>=3:

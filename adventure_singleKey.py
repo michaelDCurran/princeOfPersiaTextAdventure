@@ -18,15 +18,23 @@ class HandleInput(object):
 		print "Good bye"
 		sys.exit(0)
 
-	def do_stepLeft(self):
+	def do_stepLeft(self,grab=False):
 		"""Moves left one place, or turns left if not facing that way."""
 		if not self.kid.turnLeft():
-			self.kid.step()
+			self.kid.step(grab=grab)
 
-	def do_stepRight(self):
+	def do_stepLeft_and_grab(self):
+		return self.do_stepLeft(grab=True)
+	do_stepLeft_and_grab.__doc__=do_stepLeft.__doc__+" Automatically grabs onto the closest ledge ahead if falling."
+
+	def do_stepRight(self,grab=False):
 		"""Moves right one place, or turns left if not facing that way."""
 		if not self.kid.turnRight():
-			self.kid.step()
+			self.kid.step(grab=grab)
+
+	def do_stepRight_and_grab(self):
+		return self.do_stepRight(grab=True)
+	do_stepRight_and_grab.__doc__=do_stepRight.__doc__+" Automatically grabs onto the closest ledge ahead if falling."
 
 	def do_walkLeft(self):
 		"""Continues walking left until reaching a drop or a wall."""
@@ -42,15 +50,23 @@ class HandleInput(object):
 		"""Picks up the item at your position."""
 		self.kid.pickUpItem()
 
-	def do_leapLeft(self):
-		"""Jumps left 2 positions. Useful for crossing empty space. Automatically grabs onto a ledge ahead if just missing it by one position."""
+	def do_leapLeft(self,grab=False):
+		"""Jumps left 2 positions. Useful for crossing empty space."""
 		self.kid.turnLeft()
-		self.kid.leap(grab=True)
+		self.kid.leap(grab=grab)
 
-	def do_leapRight(self):
-		"""Jumps right 2 positions. Useful for crossing empty space. Automatically grabs onto a ledge ahead if just missing it by one position."""
+	def do_leapLeft_and_grab(self):
+		return self.do_leapLeft(grab=True)
+	do_leapLeft_and_grab.__doc__=do_leapLeft.__doc__+" Automatically grabs onto the closest ledge ahead if just missing it."
+
+	def do_leapRight(self,grab=False):
+		"""Jumps right 2 positions. Useful for crossing empty space."""
 		self.kid.turnRight()
-		self.kid.leap(grab=True)
+		self.kid.leap(grab=grab)
+
+	def do_leapRight_and_grab(self):
+		return self.do_leapRight(grab=True)
+	do_leapRight_and_grab.__doc__=do_leapRight.__doc__+" Automatically grabs onto the closest ledge ahead if just missing it."
 
 	def do_kill(self):
 		"""Kills the guard directly ahead of you."""
@@ -68,6 +84,8 @@ class HandleInput(object):
 		"""Prints commands.""" 
 		print "Available commands:"
 		for key,name in self.keyCommands.iteritems():
+			if key.isupper():
+				key="Shift + %s"%(key.lower())
 			func=getattr(self,'do_'+name)
 			help=func.__doc__
 			print "%s (%s): %s"%(key,name,help)
@@ -77,12 +95,16 @@ class HandleInput(object):
 		's':"save",
 		'h':"walkLeft",
 		'j':"stepLeft",
+		'J':"stepLeft_and_grab",
 		'l':"stepRight",
+		'L':"stepRight_and_grab",
 		';':"walkRight",
 		'i':"climbUp",
 		',':"climbDown",
 		'y':"leapLeft",
+		'Y':"leapLeft_and_grab",
 		'p':"leapRight",
+		'P':"leapRight_and_grab",
 		'<':"take",
 		'k':"kill",
 		"?":"help",
@@ -96,7 +118,6 @@ class HandleInput(object):
 			funcName=self.keyCommands.get(ch)
 			if funcName:
 				func=getattr(self,'do_'+funcName)
-				#print funcName 
 				func()
 
 if __name__=='__main__':

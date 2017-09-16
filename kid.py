@@ -65,11 +65,19 @@ class Kid(object):
 			above=place.getNextPlace(UP)
 			if above:
 				if not above.tile.isEmpty:
-					msg+=", "+above.tile.roofName+" above"
+					edge=None
+					roofName=above.tile.roofName
 					if above.hasClearDirection(oppositeDirections[self.direction]):
-						msg+=" starts"
+						edge="starts"
 					elif above.hasClearDirection(self.direction):
-						msg+=" ends"
+						edge="ends"
+					if edge and isinstance(above.tile,Tile_floor):
+						roofName=Tile_floor.name
+					msg+=", %s above"%roofName
+					if edge:
+						msg+=" %s"%edge
+						if type(above.tile) is not Tile_floor and not isinstance(above.tile,Tile_wall): 
+							msg+=" with %s"%above.description
 		print msg
 
 	def printDirection(self):
