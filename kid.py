@@ -115,7 +115,7 @@ class Kid(object):
 				print "Ahead: ",
 				above=self.place.getNextPlace(UP)
 				includeAbove=above and above.tile.isEmpty
-				self.printPlace(place=ahead,includeAbove=includeAbove)
+				self.printPlace(place=ahead) #,includeAbove=includeAbove)
 
 	def doPossibleHarm(self,vMomentum,hMomentum):
 		if self.place.guard:
