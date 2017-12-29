@@ -13,11 +13,11 @@ class Kid(object):
 			self.die()
 		return newPlace
 
-	def __init__(self,levelPath):
+	def __init__(self,levelNumber):
 		self.alive=True
 		self.healthPoints=3
 		self.possibleHealthPoints=3
-		self.loadLevel(levelPath)
+		self.loadLevel(levelNumber)
 
 	def printHealth(self):
 		if self.alive:
@@ -330,7 +330,6 @@ class Kid(object):
 		kid=pickle.loads(saveState)
 		if not isinstance(kid,cls):
 			raise ValueError("file was not a Kid")
-		kid.lastRestorePoint=saveState
 		return kid
 
 	@classmethod
@@ -348,9 +347,13 @@ class Kid(object):
 			s=self._createRestorePoint()
 			f.write(s)
 
-	def loadLevel(self,path):
-		level=Level(path)
+	def loadLevel(self,levelNumber):
+		level=Level(levelNumber)
 		self.place=Place(level,level.start_position[0]-1,level.start_position[1]/PLACES,level.start_position[1]%PLACES)
-		self.hasSword=True if self.place.level.levelNo>1 else False
+		self.hasSword=True if self.place.level.levelNumber>1 else False
 		self.direction=RIGHT if level.start_position[2] else LEFT
 		self.lastRestorePoint=self._createRestorePoint()
+
+	def loadNextLevel(self):
+		self.loadLevel(self.place.level.levelNumber+1)
+

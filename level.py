@@ -4,16 +4,14 @@ from legacy_level import *
 
 class Level(object):
 
+	PATH_TEMPLATE="levels/%02d"
 	legacyLevel=None
-	path=None
 
-	def __init__(self,path):
-		self._loadFromPath(path)
+	def __init__(self,levelNumber):
+		self._loadFromPath(self.PATH_TEMPLATE%levelNumber)
+		self.levelNumber=levelNumber
 
 	def _loadFromPath(self,path):
-		self.path=path
-		self.levelNo=int(self.path[-2:])
-		self.nextLevelPath=self.path[:-2]+("%02d"%(self.levelNo+1))
 		with open(path,'rb') as f:
 			baseData=f.read()
 		buffer=ctypes.c_buffer(baseData)
@@ -28,12 +26,13 @@ class Level(object):
 			if new!=old:
 				delta[index]=new
 			index+=1
-		return (self.path,delta)
+		return (self.levelNumber,delta)
 
-	def __setstate__(self,(path,delta)):
-		self._loadFromPath(path)
+	def __setstate__(self,(levelNumber,delta)):
+		self._loadFromPath(self.PATH_TEMPLATE%levelNumber)
 		for index,val in delta.iteritems():
 			self.legacyLevel._curRaw[index]=val
+		self.levelNumber=levelNumber
 
 	def __getattr__(self,name):
 		return getattr(self.legacyLevel,name)

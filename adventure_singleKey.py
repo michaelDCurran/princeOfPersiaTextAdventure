@@ -122,19 +122,19 @@ class HandleInput(object):
 
 if __name__=='__main__':
 	print "Prince of Persia Text Adventure"
-	levelNo=1
+	levelNumber=1
 	if len(sys.argv)>1:
 		loadPath=sys.argv[1]
 		kid=Kid.loadFromFile(loadPath)
 		print "Restored from %s"%loadPath
 	else:
-		kid=Kid('levels/01')
+		kid=Kid(levelNumber)
 	while True:
-		print "On level %d"%kid.place.level.levelNo
-		kid.touchPlace(0,0)
-		kid.printDirection()
-		kid.printHealth()
+		print "On level %d"%kid.place.level.levelNumber
 		try:
+			kid.touchPlace(0,0)
+			kid.printDirection()
+			kid.printHealth()
 			HandleInput(kid)
 		except KidDeath:
 			print "Press enter to restart"
@@ -145,4 +145,4 @@ if __name__=='__main__':
 			print "Level complete"
 			print "Press enter to proceed to next level"
 			raw_input()
-			kid.loadLevel(kid.place.level.nextLevelPath)
+			kid.loadNextLevel()
