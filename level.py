@@ -22,15 +22,16 @@ class Level(object):
 	def __getstate__(self):
 		delta={}
 		index=0
-		for old,new in itertools.izip(self.legacyLevel._origRaw,self.legacyLevel._curRaw):
+		for old,new in zip(self.legacyLevel._origRaw,self.legacyLevel._curRaw):
 			if new!=old:
 				delta[index]=new
 			index+=1
 		return (self.levelNumber,delta)
 
-	def __setstate__(self,(levelNumber,delta)):
+	def __setstate__(self, xxx_todo_changeme):
+		(levelNumber,delta) = xxx_todo_changeme
 		self._loadFromPath(self.PATH_TEMPLATE%levelNumber)
-		for index,val in delta.iteritems():
+		for index,val in delta.items():
 			self.legacyLevel._curRaw[index]=val
 		self.levelNumber=levelNumber
 

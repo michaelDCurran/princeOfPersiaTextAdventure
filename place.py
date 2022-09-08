@@ -39,7 +39,7 @@ class Place(object):
 		return Place(level,room,floor,place)
 
 	def __init__(self,level,room,floor,place):
-		self.level,self.room,self.floor,self.place=level,room,floor,place
+		self.level,self.room,self.floor,self.place=level,int(room),int(floor),int(place)
 
 	@property
 	def guard(self):

@@ -7,4 +7,4 @@ class Guard(object):
 
 	def kill(self):
 		self.place.level.guard_location[self.place.room]=FLOORS*PLACES
-		print "(Guard died)"
+		print("(Guard died)")

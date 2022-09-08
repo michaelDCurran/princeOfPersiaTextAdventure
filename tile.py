@@ -123,13 +123,13 @@ class Tile_looseBoard(Tile_floor):
 
 	def touch(self):
 		self.place._lt=LT_EMPTY
-		print "(loose floor fell)"
+		print("(loose floor fell)")
 		place=self.place
 		while place.tile.isEmpty:
 			place=place.getNextPlace(DOWN)
 			if not place:
 				return
-		print "(loose floor landed on %s below)"%place.tile.name
+		print("(loose floor landed on %s below)"%place.tile.name)
 		place.tile.touch()
 
 class Tile_stuckButton(Tile_floor):
@@ -142,7 +142,7 @@ class Tile_dropButton(Tile_button):
 	name="floor button"
 
 	def touch(self):
-		print "(button activated)"
+		print("(button activated)")
 		place=self.place.fromEvent(self.place.level,self.place._lm)
 		place.tile.setOpenState(False)
 
@@ -150,7 +150,7 @@ class Tile_raiseButton(Tile_button):
 	name="raise button"
 
 	def touch(self):
-		print "(button activated)"
+		print("(button activated)")
 		place=self.place.fromEvent(self.place.level,self.place._lm)
 		place.tile.setOpenState(True)
 
@@ -187,10 +187,10 @@ class Tile_gate(Tile_door):
 	def setOpenState(self,isOpen):
 		if isOpen!=self.isOpen:
 			if isOpen:
-				print "(Gate opened)"
+				print("(Gate opened)")
 				self.place._lm=LM_GATE_OPEN
 			else:
-				print "(gate closed)"
+				print("(gate closed)")
 				self._lm=LM_GATE_CLOSED
 
 class Tile_exit(Tile_door):
@@ -204,10 +204,10 @@ class Tile_exit(Tile_door):
 	def setOpenState(self,isOpen):
 		if isOpen!=self.isOpen:
 			if isOpen:
-				print "(Exit opened)"
+				print("(Exit opened)")
 				self.place._lm=LM_EXIT_MOST_OPEN
 			else:
-				print "(Exit closed)"
+				print("(Exit closed)")
 				self._lm=LM_EXIT_CLOSED
 
 class Tile_wall(Tile):

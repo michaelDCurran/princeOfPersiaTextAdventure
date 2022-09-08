@@ -3,19 +3,19 @@ import msvcrt
 import re
 import cmd
 import time
-import cPickle as pickle
+import pickle as pickle
 from kid import *
 
 class HandleInput(object):
  
 	def do_save(self):
 		"""Prompts for a path to save the current game."""
-		path=raw_input("Enter file name to save to:")
+		path=input("Enter file name to save to:")
 		self.kid.saveToFile(path)
 
 	def do_quit(self):
 		"""Quits the game."""
-		print "Good bye"
+		print("Good bye")
 		sys.exit(0)
 
 	def do_stepLeft(self,grab=False):
@@ -82,13 +82,13 @@ class HandleInput(object):
 
 	def do_help(self):
 		"""Prints commands.""" 
-		print "Available commands:"
-		for key,name in self.keyCommands.iteritems():
+		print("Available commands:")
+		for key,name in self.keyCommands.items():
 			if key.isupper():
 				key="Shift + %s"%(key.lower())
 			func=getattr(self,'do_'+name)
 			help=func.__doc__
-			print "%s (%s): %s"%(key,name,help)
+			print("%s (%s): %s"%(key,name,help))
 
 	keyCommands={
 		'q':"quit",
@@ -114,35 +114,35 @@ class HandleInput(object):
 		self.kid=kid
 		while True:
 			#print "> ",
-			ch=msvcrt.getch()
+			ch=msvcrt.getch().decode()
 			funcName=self.keyCommands.get(ch)
 			if funcName:
 				func=getattr(self,'do_'+funcName)
 				func()
 
 if __name__=='__main__':
-	print "Prince of Persia Text Adventure"
+	print("Prince of Persia Text Adventure")
 	levelNumber=1
 	if len(sys.argv)>1:
 		loadPath=sys.argv[1]
 		kid=Kid.loadFromFile(loadPath)
-		print "Restored from %s"%loadPath
+		print("Restored from %s"%loadPath)
 	else:
 		kid=Kid(levelNumber)
 	while True:
-		print "On level %d"%kid.place.level.levelNumber
+		print("On level %d"%kid.place.level.levelNumber)
 		try:
 			kid.touchPlace(0,0)
 			kid.printDirection()
 			kid.printHealth()
 			HandleInput(kid)
 		except KidDeath:
-			print "Press enter to restart"
-			raw_input()
+			print("Press enter to restart")
+			input()
 			kid=kid.loadFromRestorePoint(kid.lastRestorePoint)
 			continue
 		except LevelExit:
-			print "Level complete"
-			print "Press enter to proceed to next level"
-			raw_input()
+			print("Level complete")
+			print("Press enter to proceed to next level")
+			input()
 			kid.loadNextLevel()
