@@ -3,7 +3,14 @@ from place import *
 class KidDeath(Exception):
 	pass
 
-class Kid(object):
+class Kid:
+
+	def superimposeOnTileImage(self, block):
+		block[-2]=[0,0,4,4,0,0]
+		block[-3]=[0,0,4,4,0,0]
+		block[-4]=[0,0,4,4,0,0]
+		block[-5]=[0,0,4,4,0,0]
+		block[-4][1 if self.direction==LEFT else 4]=4
 
 	hasSword=False
 
@@ -349,7 +356,11 @@ class Kid(object):
 
 	def loadLevel(self,levelNumber):
 		level=Level(levelNumber)
-		self.place=Place(level,level.start_position[0]-1,level.start_position[1]/PLACES,level.start_position[1]%PLACES)
+		roomNum = level.start_position[0]-1
+		room = Room(level, roomNum)
+		floorNum = level.start_position[1]/PLACES
+		placeNum = level.start_position[1]%PLACES
+		self.place=Place(room,floorNum,placeNum)
 		self.hasSword=True if self.place.level.levelNumber>1 else False
 		self.direction=RIGHT if level.start_position[2] else LEFT
 		self.lastRestorePoint=self._createRestorePoint()

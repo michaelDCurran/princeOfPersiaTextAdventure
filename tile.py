@@ -1,7 +1,16 @@
 from level import *
 from place import *
 
+tileImageWidth = 6
+tileImageHeight = 11
+
 class Tile(object):
+
+	def generateImage(self):
+		block=[]
+		for i in range(tileImageHeight):
+			block.append([0]*tileImageWidth)
+		return block
 
 	def __init__(self,place):
 		self.place=place
@@ -48,6 +57,12 @@ class Tile_empty(Tile):
 
 class Tile_floor(Tile):
 
+	def generateImage(self):
+		block=super(Tile_floor,self).generateImage()
+		for x in range(tileImageWidth):
+			block[-1][x]=4
+		return block
+
 	name="floor"
 	isFloor=True
 
@@ -61,8 +76,25 @@ class Tile_floor(Tile):
 			return 1
 		return super(Tile_floor,self).willHarmActer(vMomentum,hMomentum)
 
+class Tile_pillar(Tile_floor):
+
+	def generateImage(self):
+		block=[]
+		for i in range(tileImageHeight):
+			block.append([0,2,2,2,2,0])
+		block[-1]=[4,4,4,4,4,4]
+		return block
+
 class Tile_spikes(Tile_floor):
 	name="spikes"
+
+	def generateImage(self):
+		block=super(Tile_spikes,self).generateImage()
+		block[-2]=[4,0,4,0,4,0]
+		block[-3]=[4,0,4,0,4,0]
+		block[-4]=[3,0,3,0,3,0]
+		block[-5]=[2,0,2,0,2,0]
+		return block
 
 	def willKillActer(self,vMomentum,hMomentum):
 		if vMomentum>=2 or hMomentum>=2:
@@ -88,11 +120,30 @@ class Tile_item(Tile_floor):
 class Tile_sword(Tile_item):
 	name="sword"
 
+	def generateImage(self):
+		block=super(Tile_sword,self).generateImage()
+		block[-3]=[3,3,0,0,0,0]
+		block[-4]=[4,4,3,3,3,0]
+		block[-5]=[4,4,0,0,0,0]
+		return block
+
 	def affectKid(self,acter):
 		acter.hasSword=True
 
 class Tile_potion(Tile_item):
 	name="potion"
+
+	def generateImage(self):
+		block=super(Tile_floor,self).generateImage()
+		block[-1]=[4,4,4,4,4,4]
+		block[-2]=[0,0,4,4,4,0]
+		block[-3]=[0,0,4,4,4,0]
+		block[-4]=[0,0,4,4,4,0]
+		block[-5]=[0,0,0,3,0,0]
+		block[-6]=[0,0,0,3,0,0]
+		block[-7]=[0,0,3,0,3,0]
+		block[-8]=[0,0,0,3,0,0]
+		return block
 
 	_potionStateDescriptions={
 		LM_POTION_EMPTY:"empty",
@@ -121,6 +172,11 @@ class Tile_looseBoard(Tile_floor):
 	name="loose floor"
 	roofName="loose tile"
 
+	def generateImage(self):
+		block=super(Tile_looseBoard,self).generateImage()
+		block[-1]=[3,1,3,1,3,1]
+		return block
+
 	def touch(self):
 		self.place._lt=LT_EMPTY
 		print("(loose floor fell)")
@@ -136,7 +192,11 @@ class Tile_stuckButton(Tile_floor):
 	name="stuck button"
 
 class Tile_button(Tile_floor):
-	pass
+
+	def generateImage(self):
+		block=super(Tile_button,self).generateImage()
+		block[-2]=[2,3,3,3,3,2]
+		return block
 
 class Tile_dropButton(Tile_button):
 	name="floor button"
@@ -159,6 +219,18 @@ class Tile_door(Tile_floor):
 	name="door"
 	isOpen=False
 	isObstructive=False
+
+	def generateImage(self):
+		block=super(Tile_door,self).generateImage()
+		for i in range(tileImageHeight):
+			for j in range(tileImageWidth):
+				val=0
+				if j==0 or j==(tileImageWidth-1):
+					val=4
+				elif i%2==0:
+					val=4 if not self.isOpen or i==0 else 0
+				block[i][j]=val
+		return block
 
 	@property
 	def passVerb(self):
@@ -214,6 +286,13 @@ class Tile_wall(Tile):
 	name="wall"
 	isWall=True
 
+	def generateImage(self):
+		block=super(Tile_wall,self).generateImage()
+		for i in range(tileImageHeight):
+			for j in range(tileImageWidth):
+				block[i][j]=4
+		return block
+
 class Tile_mirror(Tile_wall):
 	name="mirror"
 	passVerb="through"
@@ -222,7 +301,7 @@ tileMap={
 	LT_EMPTY:(Tile_empty,None),
 	LT_FLOOR:(Tile_floor,None),
 	LT_SPIKES:(Tile_spikes,None),
-	LT_PILLAR:(Tile_floor,"pillar"),
+	LT_PILLAR:(Tile_pillar,"pillar"),
 	LT_GATE:(Tile_gate,None),
 	LT_STUCK_BUTTON:(Tile_stuckButton,None),
 	LT_DROP_BUTTON:(Tile_dropButton,None),

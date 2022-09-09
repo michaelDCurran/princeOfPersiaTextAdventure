@@ -3,10 +3,11 @@ import msvcrt
 import re
 import cmd
 import time
+from imagePlayer import ImagePlayer
 import pickle as pickle
 from kid import *
 
-class HandleInput(object):
+class HandleInput:
  
 	def do_save(self):
 		"""Prompts for a path to save the current game."""
@@ -90,31 +91,35 @@ class HandleInput(object):
 			help=func.__doc__
 			print("%s (%s): %s"%(key,name,help))
 
+	def do_sonify(self):
+		image = self.kid.place.room.generateImage(self.kid)
+		sonifier.sweepImage(image, sweepDuration=5)
+
 	keyCommands={
-		'q':"quit",
-		's':"save",
-		'h':"walkLeft",
-		'j':"stepLeft",
-		'J':"stepLeft_and_grab",
-		'l':"stepRight",
-		'L':"stepRight_and_grab",
-		';':"walkRight",
-		'i':"climbUp",
-		',':"climbDown",
-		'y':"leapLeft",
-		'Y':"leapLeft_and_grab",
-		'p':"leapRight",
-		'P':"leapRight_and_grab",
-		'<':"take",
-		'k':"kill",
-		"?":"help",
+		b'q':"quit",
+		b's':"save",
+		b'h':"walkLeft",
+		b'j':"stepLeft",
+		b'J':"stepLeft_and_grab",
+		b'l':"stepRight",
+		b'L':"stepRight_and_grab",
+		b';':"walkRight",
+		b'i':"climbUp",
+		b',':"climbDown",
+		b'y':"leapLeft",
+		b'Y':"leapLeft_and_grab",
+		b'p':"leapRight",
+		b'P':"leapRight_and_grab",
+		b'<':"take",
+		b'k':"kill",
+		b"?":"help",
+		b"`": "sonify",
 	}
 
 	def __init__(self,kid):
 		self.kid=kid
 		while True:
-			#print "> ",
-			ch=msvcrt.getch().decode()
+			ch=msvcrt.getch()
 			funcName=self.keyCommands.get(ch)
 			if funcName:
 				func=getattr(self,'do_'+funcName)
@@ -129,6 +134,7 @@ if __name__=='__main__':
 		print("Restored from %s"%loadPath)
 	else:
 		kid=Kid(levelNumber)
+	sonifier = ImagePlayer(lowFreq=220, highFreq=7040, width=roomImageWidth, height=roomImageHeight)
 	while True:
 		print("On level %d"%kid.place.level.levelNumber)
 		try:
