@@ -368,3 +368,9 @@ class Kid:
 	def loadNextLevel(self):
 		self.loadLevel(self.place.level.levelNumber+1)
 
+	def printWhere(self):
+		levelNum = self.place.level.levelNumber
+		roomNum = self.place.room.roomNum + 1
+		floorNum = self.place.floorNum + 1
+		placeNum = self.place.placeNum + 1
+		print(f"Level {levelNum}, room {roomNum}, floor {floorNum}, place {placeNum}")

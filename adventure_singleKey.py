@@ -81,6 +81,10 @@ class HandleInput:
 		"""Climb down behind you."""
 		self.kid.climbDown()
 
+	def do_where(self):
+		""" Reports level number, room number, floor and place."""
+		kid.printWhere()
+
 	def do_help(self):
 		"""Prints commands.""" 
 		print("Available commands:")
@@ -112,6 +116,7 @@ class HandleInput:
 		b'P':"leapRight_and_grab",
 		b'<':"take",
 		b'k':"kill",
+		b"w": "where",
 		b"?":"help",
 		b"`": "sonify",
 	}
