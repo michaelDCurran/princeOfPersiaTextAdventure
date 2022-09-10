@@ -65,7 +65,16 @@ class Kid:
 			msg+="guard, "
 		if place.tile.isEmpty:
 			bottom,floorCount=place.tile.findBottom()
-			msg+=("%d story drop to %s below"%(floorCount,bottom.description if bottom else "abis"))
+			edge, distance = place.tile.findClosestEdge(self.direction)
+			dropWidthLabel = ""
+			if edge.tile.isFloor:
+				if distance == 1:
+					dropWidthLabel = "narrow"
+				elif distance == 2:
+					dropWidthLabel = "wide"
+			bottomLabel = bottom.description if bottom else "abis"
+			dropMessage = f"{dropWidthLabel} {floorCount} story drop to {bottomLabel} below".strip()
+			msg+=dropMessage
 		else:
 			msg+=place.description
 		if includeAbove:
@@ -120,9 +129,12 @@ class Kid:
 			ahead=self.place.getNextPlace(self.direction)
 			if ahead:
 				print("Ahead: ", end=' ')
-				above=self.place.getNextPlace(UP)
-				includeAbove=above and above.tile.isEmpty
-				self.printPlace(place=ahead) #,includeAbove=includeAbove)
+				self.printPlace(place=ahead)
+				if ahead.tile.isEmpty:
+					furtherAhead, distance = ahead.tile.findClosestEdge(self.direction)
+					if distance < 3 and furtherAhead.tile.isFloor:
+						print("Further ahead: ", end=' ')
+						self.printPlace(place=furtherAhead, includeAbove=False)
 
 	def doPossibleHarm(self,vMomentum,hMomentum):
 		if self.place.guard:
@@ -303,6 +315,11 @@ class Kid:
 			if ahead:
 				print("Ahead: ", end=' ')
 				self.printPlace(place=ahead)
+				if ahead.tile.isEmpty:
+					furtherAhead, distance = ahead.tile.findClosestEdge(self.direction)
+					if distance < 3 and furtherAhead.tile.isFloor:
+						print("Further ahead: ", end=' ')
+						self.printPlace(place=furtherAhead, includeAbove=False)
 			return True
 		return False
 

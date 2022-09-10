@@ -55,6 +55,14 @@ class Tile_empty(Tile):
 			floorCount+=1
 		return (place,floorCount)
 
+	def findClosestEdge(self, direction):
+		distance=0
+		place=self.place
+		while place and place.tile.isEmpty:
+			place=place.getNextPlace(direction)
+			distance+=1
+		return (place,distance)
+
 class Tile_floor(Tile):
 
 	def generateImage(self):
