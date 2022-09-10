@@ -213,9 +213,9 @@ class Kid:
 					elif not run and (not nextPlace or nextPlace.tile.isEmpty):
 						continuing=False
 			oldHealthPoints=self.healthPoints
-			oldFloor=self.place.floor
+			oldFloor=self.place.floorNum
 			self.touchPlace(0,hMomentum,continuing=continuing)
-			if self.healthPoints!=oldHealthPoints or self.place.floor!=oldFloor:
+			if self.healthPoints!=oldHealthPoints or self.place.floorNum!=oldFloor:
 				break
 
 	def walk(self,maxPlaces=None,stopAtName=None):
