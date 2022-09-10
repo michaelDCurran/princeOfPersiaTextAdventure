@@ -189,12 +189,16 @@ class Tile_looseBoard(Tile_floor):
 		self.place._lt=LT_EMPTY
 		print("(loose floor fell)")
 		place=self.place
+		numStories = 0
 		while place.tile.isEmpty:
+			numStories += 1
 			place=place.getNextPlace(DOWN)
 			if not place:
-				return
-		print("(loose floor landed on %s below)"%place.tile.name)
-		place.tile.touch()
+				break
+		if place:
+			landedOn = place.tile.name
+			print(f"(loose floor landed on {landedOn} {numStories} stories below)")
+			place.tile.touch()
 
 class Tile_stuckButton(Tile_floor):
 	name="stuck button"

@@ -156,13 +156,17 @@ class Kid:
 
 	def doPossibleFall(self,grab=False):
 		floorCount=0
-		while self.place.tile.isEmpty:
+		place = self.place
+		while place and place.tile.isEmpty:
 			if grab and floorCount<2 and self.doPossibleGrab():
 				return True
-			print("Falling down")
-			self.place=self.getNextPlaceOrDie(self.place,DOWN)
+			place=place.getNextPlace(DOWN)
 			floorCount+=1
 		if floorCount>0:
+			print(f"(Fell down {floorCount} stories)")
+			if not place:
+				self.die()
+			self.place = place
 			self.touchPlace(floorCount,0)
 		return floorCount>0
 
