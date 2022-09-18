@@ -1,3 +1,4 @@
+import os
 import sys
 import msvcrt
 import re
@@ -133,11 +134,19 @@ class HandleInput:
 if __name__=='__main__':
 	print("Prince of Persia Text Adventure")
 	levelNumber=1
+	kid = None
 	if len(sys.argv)>1:
-		loadPath=sys.argv[1]
-		kid=Kid.loadFromFile(loadPath)
-		print("Restored from %s"%loadPath)
-	else:
+		arg = sys.argv[1]
+		if os.path.isfile(arg):
+			kid=Kid.loadFromFile(arg)
+			print("Restored from %s"%arg)
+		else:
+			try:
+				levelNumber = int(arg)
+			except ValueError:
+				print("Bad argument: %r"%arg)
+				sys.exit(1)
+	if not kid:
 		kid=Kid(levelNumber)
 	sonifier = ImagePlayer(lowFreq=220, highFreq=7040, width=roomImageWidth, height=roomImageHeight)
 	while True:
