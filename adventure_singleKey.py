@@ -4,7 +4,6 @@ import msvcrt
 import re
 import cmd
 import time
-from imagePlayer import ImagePlayer
 import pickle as pickle
 from kid import *
 
@@ -97,6 +96,9 @@ class HandleInput:
 			print("%s (%s): %s"%(key,name,help))
 
 	def do_sonify(self):
+		if not sonifier:
+			print("Sonification not available")
+			return
 		image = self.kid.place.room.generateImage(self.kid)
 		sonifier.sweepImage(image, sweepDuration=5)
 
@@ -148,7 +150,13 @@ if __name__=='__main__':
 				sys.exit(1)
 	if not kid:
 		kid=Kid(levelNumber)
-	sonifier = ImagePlayer(lowFreq=220, highFreq=7040, width=roomImageWidth, height=roomImageHeight)
+	try:
+		from imagePlayer import ImagePlayer
+	except ModuleNotFoundError:
+		print("Sonification not available")
+		sonifier = None
+	else:
+		sonifier = ImagePlayer(lowFreq=220, highFreq=7040, width=roomImageWidth, height=roomImageHeight)
 	while True:
 		print("On level %d"%kid.place.level.levelNumber)
 		try:
