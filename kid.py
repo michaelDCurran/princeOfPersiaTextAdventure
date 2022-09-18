@@ -5,7 +5,7 @@ class KidDeath(Exception):
 
 class Kid:
 
-	def superimposeOnTileImage(self, block):
+	def superimposeOnTileImage(self, block: list):
 		block[-2]=[0,0,4,4,0,0]
 		block[-3]=[0,0,4,4,0,0]
 		block[-4]=[0,0,4,4,0,0]
@@ -14,7 +14,7 @@ class Kid:
 
 	hasSword=False
 
-	def getNextPlaceOrDie(self,place,direction):
+	def getNextPlaceOrDie(self,place: Place,direction):
 		newPlace=place.getNextPlace(direction)
 		if not newPlace:
 			self.die()
@@ -96,6 +96,17 @@ class Kid:
 							msg+=" with %s"%above.description
 		print(msg)
 
+	def printAhead(self):
+		ahead=self.place.getNextPlace(self.direction)
+		if ahead:
+			print("Ahead: ", end=' ')
+			self.printPlace(place=ahead)
+			if ahead.tile.isEmpty:
+				furtherAhead, distance = ahead.tile.findClosestEdge(self.direction)
+				if distance < 3 and furtherAhead.tile.isFloor:
+					print("Further ahead: ", end=' ')
+					self.printPlace(place=furtherAhead, includeAbove=False)
+
 	def printDirection(self):
 		print("Facing %s"%directionLabels[self.direction])
 
@@ -126,15 +137,7 @@ class Kid:
 		if self.place.tile.isEmpty and not continuing:
 			return self.doPossibleFall(grab=grab is not False)
 		if not continuing:
-			ahead=self.place.getNextPlace(self.direction)
-			if ahead:
-				print("Ahead: ", end=' ')
-				self.printPlace(place=ahead)
-				if ahead.tile.isEmpty:
-					furtherAhead, distance = ahead.tile.findClosestEdge(self.direction)
-					if distance < 3 and furtherAhead.tile.isFloor:
-						print("Further ahead: ", end=' ')
-						self.printPlace(place=furtherAhead, includeAbove=False)
+			self.printAhead()
 
 	def doPossibleHarm(self,vMomentum,hMomentum):
 		if self.place.guard:
@@ -314,16 +317,7 @@ class Kid:
 		if self.direction!=direction:
 			self.direction=direction
 			self.printDirection()
-			self.printPlace()
-			ahead=self.place.getNextPlace(self.direction)
-			if ahead:
-				print("Ahead: ", end=' ')
-				self.printPlace(place=ahead)
-				if ahead.tile.isEmpty:
-					furtherAhead, distance = ahead.tile.findClosestEdge(self.direction)
-					if distance < 3 and furtherAhead.tile.isFloor:
-						print("Further ahead: ", end=' ')
-						self.printPlace(place=furtherAhead, includeAbove=False)
+			self.printAhead()
 			return True
 		return False
 
